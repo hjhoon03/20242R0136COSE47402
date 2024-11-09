@@ -1,0 +1,894 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{COSE474-2024F: Deep Learning HW3}
+    \author{Jaehoon Han, 2022320101}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \subsection*{\texorpdfstring{\textbf{Homework
+3}}{Homework 3}}\label{homework-3}
+
+\textbf{Instructions} * This homework focuses on understanding and
+applying DETR for object detection and attention visualization. It
+consists of \textbf{three questions} designed to assess both theoretical
+understanding and practical application.
+
+\begin{itemize}
+\item
+  Please organize your answers and results for the questions below and
+  submit this jupyter notebook as \textbf{a .pdf file}.
+\item
+  \textbf{Deadline: 11/14 (Thur) 23:59}
+\end{itemize}
+
+\textbf{Reference} * End-to-End Object Detection with Transformers
+(DETR): https://github.com/facebookresearch/detr
+
+    \subsubsection*{\texorpdfstring{\textbf{Q1. Understanding DETR
+model}}{Q1. Understanding DETR model}}\label{q1.-understanding-detr-model}
+
+\begin{itemize}
+\tightlist
+\item
+  Fill-in-the-blank exercise to test your understanding of critical
+  parts of the DETR model workflow.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{torch} \PY{k+kn}{import} \PY{n}{nn}
+\PY{k}{class} \PY{n+nc}{DETR}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def} \PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{num\PYZus{}classes}\PY{p}{,} \PY{n}{hidden\PYZus{}dim}\PY{o}{=}\PY{l+m+mi}{256}\PY{p}{,} \PY{n}{nheads}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{,}
+                 \PY{n}{num\PYZus{}encoder\PYZus{}layers}\PY{o}{=}\PY{l+m+mi}{6}\PY{p}{,} \PY{n}{num\PYZus{}decoder\PYZus{}layers}\PY{o}{=}\PY{l+m+mi}{6}\PY{p}{,} \PY{n}{num\PYZus{}queries}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{super}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} create ResNet\PYZhy{}50 backbone}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone} \PY{o}{=} \PY{n}{resnet50}\PY{p}{(}\PY{p}{)}
+        \PY{k}{del} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{fc}
+
+        \PY{c+c1}{\PYZsh{} create conversion layer}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{conv} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{2048}\PY{p}{,} \PY{n}{hidden\PYZus{}dim}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} create a default PyTorch transformer}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{transformer} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Transformer}\PY{p}{(}
+            \PY{n}{hidden\PYZus{}dim}\PY{p}{,} \PY{n}{nheads}\PY{p}{,} \PY{n}{num\PYZus{}encoder\PYZus{}layers}\PY{p}{,} \PY{n}{num\PYZus{}decoder\PYZus{}layers}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} prediction heads, one extra class for predicting non\PYZhy{}empty slots}
+        \PY{c+c1}{\PYZsh{} note that in baseline DETR linear\PYZus{}bbox layer is 3\PYZhy{}layer MLP}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear\PYZus{}class} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{hidden\PYZus{}dim}\PY{p}{,} \PY{n}{num\PYZus{}\PYZus{}classes} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear\PYZus{}bbox} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{hidden\PYZus{}dim}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} output positional encodings (object queries)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{query\PYZus{}pos} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Parameter}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{hidden\PYZus{}dim}\PY{p}{)}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} spatial positional encodings}
+        \PY{c+c1}{\PYZsh{} note that in baseline DETR we use sine positional encodings}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{row\PYZus{}embed} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Parameter}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{hidden\PYZus{}dim} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{col\PYZus{}embed} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Parameter}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{hidden\PYZus{}dim} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{inputs}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} propagate inputs through ResNet\PYZhy{}50 up to avg\PYZhy{}pool layer}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{conv1}\PY{p}{(}\PY{n}{inputs}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{bn1}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{relu}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{maxpool}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{layer1}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{layer2}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{layer3}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+        \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{backbone}\PY{o}{.}\PY{n}{layer4}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} convert from 2048 to 256 feature planes for the transformer}
+        \PY{n}{h} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{conv}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} construct positional encodings}
+        \PY{n}{H}\PY{p}{,} \PY{n}{W} \PY{o}{=} \PY{n}{h}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}
+        \PY{n}{pos} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{cat}\PY{p}{(}\PY{p}{[}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{col\PYZus{}embed}\PY{p}{[}\PY{p}{:}\PY{n}{W}\PY{p}{]}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{.}\PY{n}{repeat}\PY{p}{(}\PY{n}{H}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{row\PYZus{}embed}\PY{p}{[}\PY{p}{:}\PY{n}{H}\PY{p}{]}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{repeat}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{W}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}
+        \PY{p}{]}\PY{p}{,} \PY{n}{dim}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} propagate through the transformer}
+        \PY{n}{h} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{transformer}\PY{p}{(}\PY{n}{pos} \PY{o}{+} \PY{l+m+mf}{0.1} \PY{o}{*} \PY{n}{h}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{permute}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}
+                             \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{query\PYZus{}pos}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+
+
+        \PY{c+c1}{\PYZsh{} finally project transformer outputs to class labels and bounding boxes}
+        \PY{n}{pred\PYZus{}logits} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear\PYZus{}class}\PY{p}{(}\PY{n}{h}\PY{p}{)}
+        \PY{n}{pred\PYZus{}boxes} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear\PYZus{}bbox}\PY{p}{(}\PY{n}{h}\PY{p}{)}\PY{o}{.}\PY{n}{sigmoid}\PY{p}{(}\PY{p}{)}
+
+        \PY{k}{return} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}logits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{pred\PYZus{}logits}\PY{p}{,}
+                \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}boxes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{pred\PYZus{}boxes}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsubsection*{\texorpdfstring{\textbf{Q2. Custom Image Detection and
+Attention
+Visualization}}{Q2. Custom Image Detection and Attention Visualization}}\label{q2.-custom-image-detection-and-attention-visualization}
+
+In this task, you will upload an \textbf{image of your choice}
+(different from the provided sample) and follow the steps below:
+
+\begin{itemize}
+\item
+  Object Detection using DETR
+\item
+  Use the DETR model to detect objects in your uploaded image.
+\item
+  Attention Visualization in Encoder
+\item
+  Visualize the regions of the image where the encoder focuses the most.
+\item
+  Decoder Query Attention in Decoder
+\item
+  Visualize how the decoder's query attends to specific areas
+  corresponding to the detected objects.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{math}
+
+\PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k+kn}{import} \PY{n}{Image}
+\PY{k+kn}{import} \PY{n+nn}{requests}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{o}{\PYZpc{}}\PY{n}{config} \PY{n}{InlineBackend}\PY{o}{.}\PY{n}{figure\PYZus{}format} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{retina}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{k+kn}{import} \PY{n+nn}{ipywidgets} \PY{k}{as} \PY{n+nn}{widgets}
+\PY{k+kn}{from} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k+kn}{import} \PY{n}{display}\PY{p}{,} \PY{n}{clear\PYZus{}output}
+
+\PY{k+kn}{import} \PY{n+nn}{torch}
+\PY{k+kn}{from} \PY{n+nn}{torch} \PY{k+kn}{import} \PY{n}{nn}
+
+
+\PY{k+kn}{from} \PY{n+nn}{torchvision}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k+kn}{import} \PY{n}{resnet50}
+\PY{k+kn}{import} \PY{n+nn}{torchvision}\PY{n+nn}{.}\PY{n+nn}{transforms} \PY{k}{as} \PY{n+nn}{T}
+\PY{n}{torch}\PY{o}{.}\PY{n}{set\PYZus{}grad\PYZus{}enabled}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)}\PY{p}{;}
+
+\PY{c+c1}{\PYZsh{} COCO classes}
+\PY{n}{CLASSES} \PY{o}{=} \PY{p}{[}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{person}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bicycle}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{car}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{motorcycle}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{airplane}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{truck}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{boat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{traffic light}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fire hydrant}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{stop sign}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{parking meter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bench}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bird}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dog}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{horse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sheep}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{elephant}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bear}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{zebra}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{giraffe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{backpack}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{umbrella}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{handbag}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tie}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{suitcase}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{frisbee}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{skis}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{snowboard}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sports ball}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{kite}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{baseball bat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{baseball glove}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{skateboard}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{surfboard}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tennis racket}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bottle}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wine glass}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cup}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fork}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{knife}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{spoon}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bowl}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{banana}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{apple}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sandwich}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{orange}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{broccoli}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{carrot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hot dog}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pizza}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{donut}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cake}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{chair}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{couch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{potted plant}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bed}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dining table}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{toilet}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{laptop}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mouse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{remote}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keyboard}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cell phone}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{microwave}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{oven}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{toaster}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sink}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{refrigerator}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N/A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{book}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clock}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vase}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{scissors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{teddy bear}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hair drier}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{toothbrush}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} colors for visualization}
+\PY{n}{COLORS} \PY{o}{=} \PY{p}{[}\PY{p}{[}\PY{l+m+mf}{0.000}\PY{p}{,} \PY{l+m+mf}{0.447}\PY{p}{,} \PY{l+m+mf}{0.741}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.850}\PY{p}{,} \PY{l+m+mf}{0.325}\PY{p}{,} \PY{l+m+mf}{0.098}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.929}\PY{p}{,} \PY{l+m+mf}{0.694}\PY{p}{,} \PY{l+m+mf}{0.125}\PY{p}{]}\PY{p}{,}
+          \PY{p}{[}\PY{l+m+mf}{0.494}\PY{p}{,} \PY{l+m+mf}{0.184}\PY{p}{,} \PY{l+m+mf}{0.556}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.466}\PY{p}{,} \PY{l+m+mf}{0.674}\PY{p}{,} \PY{l+m+mf}{0.188}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.301}\PY{p}{,} \PY{l+m+mf}{0.745}\PY{p}{,} \PY{l+m+mf}{0.933}\PY{p}{]}\PY{p}{]}
+\PY{c+c1}{\PYZsh{} standard PyTorch mean\PYZhy{}std input image normalization}
+\PY{n}{transform} \PY{o}{=} \PY{n}{T}\PY{o}{.}\PY{n}{Compose}\PY{p}{(}\PY{p}{[}
+    \PY{n}{T}\PY{o}{.}\PY{n}{Resize}\PY{p}{(}\PY{l+m+mi}{800}\PY{p}{)}\PY{p}{,}
+    \PY{n}{T}\PY{o}{.}\PY{n}{ToTensor}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+    \PY{n}{T}\PY{o}{.}\PY{n}{Normalize}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.485}\PY{p}{,} \PY{l+m+mf}{0.456}\PY{p}{,} \PY{l+m+mf}{0.406}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.229}\PY{p}{,} \PY{l+m+mf}{0.224}\PY{p}{,} \PY{l+m+mf}{0.225}\PY{p}{]}\PY{p}{)}
+\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} for output bounding box post\PYZhy{}processing}
+\PY{k}{def} \PY{n+nf}{box\PYZus{}cxcywh\PYZus{}to\PYZus{}xyxy}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x\PYZus{}c}\PY{p}{,} \PY{n}{y\PYZus{}c}\PY{p}{,} \PY{n}{w}\PY{p}{,} \PY{n}{h} \PY{o}{=} \PY{n}{x}\PY{o}{.}\PY{n}{unbind}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{b} \PY{o}{=} \PY{p}{[}\PY{p}{(}\PY{n}{x\PYZus{}c} \PY{o}{\PYZhy{}} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{w}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{n}{y\PYZus{}c} \PY{o}{\PYZhy{}} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{h}\PY{p}{)}\PY{p}{,}
+         \PY{p}{(}\PY{n}{x\PYZus{}c} \PY{o}{+} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{w}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{n}{y\PYZus{}c} \PY{o}{+} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{h}\PY{p}{)}\PY{p}{]}
+    \PY{k}{return} \PY{n}{torch}\PY{o}{.}\PY{n}{stack}\PY{p}{(}\PY{n}{b}\PY{p}{,} \PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{rescale\PYZus{}bboxes}\PY{p}{(}\PY{n}{out\PYZus{}bbox}\PY{p}{,} \PY{n}{size}\PY{p}{)}\PY{p}{:}
+    \PY{n}{img\PYZus{}w}\PY{p}{,} \PY{n}{img\PYZus{}h} \PY{o}{=} \PY{n}{size}
+    \PY{n}{b} \PY{o}{=} \PY{n}{box\PYZus{}cxcywh\PYZus{}to\PYZus{}xyxy}\PY{p}{(}\PY{n}{out\PYZus{}bbox}\PY{p}{)}
+    \PY{n}{b} \PY{o}{=} \PY{n}{b} \PY{o}{*} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{p}{[}\PY{n}{img\PYZus{}w}\PY{p}{,} \PY{n}{img\PYZus{}h}\PY{p}{,} \PY{n}{img\PYZus{}w}\PY{p}{,} \PY{n}{img\PYZus{}h}\PY{p}{]}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{torch}\PY{o}{.}\PY{n}{float32}\PY{p}{)}
+    \PY{k}{return} \PY{n}{b}
+
+\PY{k}{def} \PY{n+nf}{plot\PYZus{}results}\PY{p}{(}\PY{n}{pil\PYZus{}img}\PY{p}{,} \PY{n}{prob}\PY{p}{,} \PY{n}{boxes}\PY{p}{)}\PY{p}{:}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{pil\PYZus{}img}\PY{p}{)}
+    \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{gca}\PY{p}{(}\PY{p}{)}
+    \PY{n}{colors} \PY{o}{=} \PY{n}{COLORS} \PY{o}{*} \PY{l+m+mi}{100}
+    \PY{k}{for} \PY{n}{p}\PY{p}{,} \PY{p}{(}\PY{n}{xmin}\PY{p}{,} \PY{n}{ymin}\PY{p}{,} \PY{n}{xmax}\PY{p}{,} \PY{n}{ymax}\PY{p}{)}\PY{p}{,} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{prob}\PY{p}{,} \PY{n}{boxes}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{colors}\PY{p}{)}\PY{p}{:}
+        \PY{n}{ax}\PY{o}{.}\PY{n}{add\PYZus{}patch}\PY{p}{(}\PY{n}{plt}\PY{o}{.}\PY{n}{Rectangle}\PY{p}{(}\PY{p}{(}\PY{n}{xmin}\PY{p}{,} \PY{n}{ymin}\PY{p}{)}\PY{p}{,} \PY{n}{xmax} \PY{o}{\PYZhy{}} \PY{n}{xmin}\PY{p}{,} \PY{n}{ymax} \PY{o}{\PYZhy{}} \PY{n}{ymin}\PY{p}{,}
+                                   \PY{n}{fill}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{c}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+        \PY{n}{cl} \PY{o}{=} \PY{n}{p}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{p}{)}
+        \PY{n}{text} \PY{o}{=} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{CLASSES}\PY{p}{[}\PY{n}{cl}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{p}\PY{p}{[}\PY{n}{cl}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s1}{0.2f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{ax}\PY{o}{.}\PY{n}{text}\PY{p}{(}\PY{n}{xmin}\PY{p}{,} \PY{n}{ymin}\PY{p}{,} \PY{n}{text}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{15}\PY{p}{,}
+                \PY{n}{bbox}\PY{o}{=}\PY{n+nb}{dict}\PY{p}{(}\PY{n}{facecolor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{yellow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    In this section, we show-case how to load a model from hub, run it on a
+custom image, and print the result. Here we load the simplest model
+(DETR-R50) for fast inference. You can swap it with any other model from
+the model zoo.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{hub}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{facebookresearch/detr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{detr\PYZus{}resnet50}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{pretrained}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}\PY{p}{;}
+
+\PY{n}{url} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://delhi4cats.wordpress.com/wp\PYZhy{}content/uploads/2009/07/4\PYZhy{}cute\PYZhy{}puppies\PYZhy{}wallpaper\PYZhy{}640x480.jpg}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{im} \PY{o}{=} \PY{n}{Image}\PY{o}{.}\PY{n}{open}\PY{p}{(}\PY{n}{requests}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{url}\PY{p}{,} \PY{n}{stream}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{raw}\PY{p}{)} \PY{c+c1}{\PYZsh{} put your own image}
+
+\PY{c+c1}{\PYZsh{} mean\PYZhy{}std normalize the input image (batch\PYZhy{}size: 1)}
+\PY{n}{img} \PY{o}{=} \PY{n}{transform}\PY{p}{(}\PY{n}{im}\PY{p}{)}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} propagate through the model}
+\PY{n}{outputs} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{img}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} keep only predictions with 0.7+ confidence}
+\PY{n}{probas} \PY{o}{=} \PY{n}{outputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}logits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{softmax}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{keep} \PY{o}{=} \PY{n}{probas}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{values} \PY{o}{\PYZgt{}} \PY{l+m+mf}{0.9}
+
+\PY{c+c1}{\PYZsh{} convert boxes from [0; 1] to image scales}
+\PY{n}{bboxes\PYZus{}scaled} \PY{o}{=} \PY{n}{rescale\PYZus{}bboxes}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}boxes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keep}\PY{p}{]}\PY{p}{,} \PY{n}{im}\PY{o}{.}\PY{n}{size}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} mean\PYZhy{}std normalize the input image (batch\PYZhy{}size: 1)}
+\PY{n}{img} \PY{o}{=} \PY{n}{transform}\PY{p}{(}\PY{n}{im}\PY{p}{)}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} propagate through the model}
+\PY{n}{outputs} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{img}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} keep only predictions with 0.7+ confidence}
+\PY{n}{probas} \PY{o}{=} \PY{n}{outputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}logits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{softmax}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{keep} \PY{o}{=} \PY{n}{probas}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{values} \PY{o}{\PYZgt{}} \PY{l+m+mf}{0.9}
+
+\PY{c+c1}{\PYZsh{} convert boxes from [0; 1] to image scales}
+\PY{n}{bboxes\PYZus{}scaled} \PY{o}{=} \PY{n}{rescale\PYZus{}bboxes}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}boxes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keep}\PY{p}{]}\PY{p}{,} \PY{n}{im}\PY{o}{.}\PY{n}{size}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} mean\PYZhy{}std normalize the input image (batch\PYZhy{}size: 1)}
+\PY{n}{img} \PY{o}{=} \PY{n}{transform}\PY{p}{(}\PY{n}{im}\PY{p}{)}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} propagate through the model}
+\PY{n}{outputs} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{img}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} keep only predictions with 0.7+ confidence}
+\PY{n}{probas} \PY{o}{=} \PY{n}{outputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}logits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{softmax}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{keep} \PY{o}{=} \PY{n}{probas}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{values} \PY{o}{\PYZgt{}} \PY{l+m+mf}{0.9}
+
+\PY{c+c1}{\PYZsh{} convert boxes from [0; 1] to image scales}
+\PY{n}{bboxes\PYZus{}scaled} \PY{o}{=} \PY{n}{rescale\PYZus{}bboxes}\PY{p}{(}\PY{n}{outputs}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred\PYZus{}boxes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keep}\PY{p}{]}\PY{p}{,} \PY{n}{im}\PY{o}{.}\PY{n}{size}\PY{p}{)}
+
+\PY{n}{plot\PYZus{}results}\PY{p}{(}\PY{n}{im}\PY{p}{,} \PY{n}{probas}\PY{p}{[}\PY{n}{keep}\PY{p}{]}\PY{p}{,} \PY{n}{bboxes\PYZus{}scaled}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Using cache found in
+/Users/hanjaehoon/.cache/torch/hub/facebookresearch\_detr\_main
+/Users/hanjaehoon/Library/Mobile Documents/com\textasciitilde{}apple\textasciitilde{}CloudDocs/Korea Univ./2024
+Fall/Deep Learning/20242R0136COSE47402/hw3/.venv/lib/python3.10/site-
+packages/torchvision/models/\_utils.py:208: UserWarning: The parameter
+'pretrained' is deprecated since 0.13 and may be removed in the future, please
+use 'weights' instead.
+  warnings.warn(
+/Users/hanjaehoon/Library/Mobile Documents/com\textasciitilde{}apple\textasciitilde{}CloudDocs/Korea Univ./2024
+Fall/Deep Learning/20242R0136COSE47402/hw3/.venv/lib/python3.10/site-
+packages/torchvision/models/\_utils.py:223: UserWarning: Arguments other than a
+weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed
+in the future. The current behavior is equivalent to passing
+`weights=ResNet50\_Weights.IMAGENET1K\_V1`. You can also use
+`weights=ResNet50\_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Homework_3_files/Homework_3_6_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Here we visualize attention weights of the last decoder layer. This
+corresponds to visualizing, for each detected objects, which part of the
+image the model was looking at to predict this specific bounding box and
+class.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} use lists to store the outputs via up\PYZhy{}values}
+\PY{n}{conv\PYZus{}features}\PY{p}{,} \PY{n}{enc\PYZus{}attn\PYZus{}weights}\PY{p}{,} \PY{n}{dec\PYZus{}attn\PYZus{}weights} \PY{o}{=} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}
+
+\PY{n}{hooks} \PY{o}{=} \PY{p}{[}
+    \PY{n}{model}\PY{o}{.}\PY{n}{backbone}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{register\PYZus{}forward\PYZus{}hook}\PY{p}{(}
+        \PY{k}{lambda} \PY{n+nb+bp}{self}\PY{p}{,} \PY{n+nb}{input}\PY{p}{,} \PY{n}{output}\PY{p}{:} \PY{n}{conv\PYZus{}features}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{output}\PY{p}{)}
+    \PY{p}{)}\PY{p}{,}
+    \PY{n}{model}\PY{o}{.}\PY{n}{transformer}\PY{o}{.}\PY{n}{encoder}\PY{o}{.}\PY{n}{layers}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{self\PYZus{}attn}\PY{o}{.}\PY{n}{register\PYZus{}forward\PYZus{}hook}\PY{p}{(}
+        \PY{k}{lambda} \PY{n+nb+bp}{self}\PY{p}{,} \PY{n+nb}{input}\PY{p}{,} \PY{n}{output}\PY{p}{:} \PY{n}{enc\PYZus{}attn\PYZus{}weights}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{output}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{p}{)}\PY{p}{,}
+    \PY{n}{model}\PY{o}{.}\PY{n}{transformer}\PY{o}{.}\PY{n}{decoder}\PY{o}{.}\PY{n}{layers}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{multihead\PYZus{}attn}\PY{o}{.}\PY{n}{register\PYZus{}forward\PYZus{}hook}\PY{p}{(}
+        \PY{k}{lambda} \PY{n+nb+bp}{self}\PY{p}{,} \PY{n+nb}{input}\PY{p}{,} \PY{n}{output}\PY{p}{:} \PY{n}{dec\PYZus{}attn\PYZus{}weights}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{output}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{p}{)}\PY{p}{,}
+\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} propagate through the model}
+\PY{n}{outputs} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{img}\PY{p}{)} \PY{c+c1}{\PYZsh{} put your own image}
+
+\PY{k}{for} \PY{n}{hook} \PY{o+ow}{in} \PY{n}{hooks}\PY{p}{:}
+    \PY{n}{hook}\PY{o}{.}\PY{n}{remove}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} don\PYZsq{}t need the list anymore}
+\PY{n}{conv\PYZus{}features} \PY{o}{=} \PY{n}{conv\PYZus{}features}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{enc\PYZus{}attn\PYZus{}weights} \PY{o}{=} \PY{n}{enc\PYZus{}attn\PYZus{}weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{dec\PYZus{}attn\PYZus{}weights} \PY{o}{=} \PY{n}{dec\PYZus{}attn\PYZus{}weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} get the feature map shape}
+\PY{n}{h}\PY{p}{,} \PY{n}{w} \PY{o}{=} \PY{n}{conv\PYZus{}features}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tensors}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}
+
+\PY{n}{fig}\PY{p}{,} \PY{n}{axs} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{ncols}\PY{o}{=}\PY{n+nb}{len}\PY{p}{(}\PY{n}{bboxes\PYZus{}scaled}\PY{p}{)}\PY{p}{,} \PY{n}{nrows}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{22}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{)}
+\PY{n}{colors} \PY{o}{=} \PY{n}{COLORS} \PY{o}{*} \PY{l+m+mi}{100}
+\PY{k}{for} \PY{n}{idx}\PY{p}{,} \PY{n}{ax\PYZus{}i}\PY{p}{,} \PY{p}{(}\PY{n}{xmin}\PY{p}{,} \PY{n}{ymin}\PY{p}{,} \PY{n}{xmax}\PY{p}{,} \PY{n}{ymax}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{keep}\PY{o}{.}\PY{n}{nonzero}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{axs}\PY{o}{.}\PY{n}{T}\PY{p}{,} \PY{n}{bboxes\PYZus{}scaled}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ax} \PY{o}{=} \PY{n}{ax\PYZus{}i}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{dec\PYZus{}attn\PYZus{}weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{idx}\PY{p}{]}\PY{o}{.}\PY{n}{view}\PY{p}{(}\PY{n}{h}\PY{p}{,} \PY{n}{w}\PY{p}{)}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{query id: }\PY{l+s+si}{\PYZob{}}\PY{n}{idx}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax} \PY{o}{=} \PY{n}{ax\PYZus{}i}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{add\PYZus{}patch}\PY{p}{(}\PY{n}{plt}\PY{o}{.}\PY{n}{Rectangle}\PY{p}{(}\PY{p}{(}\PY{n}{xmin}\PY{p}{,} \PY{n}{ymin}\PY{p}{)}\PY{p}{,} \PY{n}{xmax} \PY{o}{\PYZhy{}} \PY{n}{xmin}\PY{p}{,} \PY{n}{ymax} \PY{o}{\PYZhy{}} \PY{n}{ymin}\PY{p}{,}
+                               \PY{n}{fill}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{blue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{CLASSES}\PY{p}{[}\PY{n}{probas}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\PY{n}{fig}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Homework_3_files/Homework_3_9_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} output of the CNN}
+\PY{n}{f\PYZus{}map} \PY{o}{=} \PY{n}{conv\PYZus{}features}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Encoder attention:      }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{enc\PYZus{}attn\PYZus{}weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Feature map:            }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{f\PYZus{}map}\PY{o}{.}\PY{n}{tensors}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Encoder attention:       torch.Size([850, 850])
+Feature map:             torch.Size([1, 2048, 25, 34])
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} get the HxW shape of the feature maps of the CNN}
+\PY{n}{shape} \PY{o}{=} \PY{n}{f\PYZus{}map}\PY{o}{.}\PY{n}{tensors}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}
+\PY{c+c1}{\PYZsh{} and reshape the self\PYZhy{}attention to a more interpretable shape}
+\PY{n}{sattn} \PY{o}{=} \PY{n}{enc\PYZus{}attn\PYZus{}weights}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{shape} \PY{o}{+} \PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Reshaped self\PYZhy{}attention:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sattn}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Reshaped self-attention: torch.Size([25, 34, 25, 34])
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} downsampling factor for the CNN, is 32 for DETR and 16 for DETR DC5}
+\PY{n}{fact} \PY{o}{=} \PY{l+m+mi}{32}
+
+\PY{c+c1}{\PYZsh{} let\PYZsq{}s select 4 reference points for visualization}
+\PY{n}{idxs} \PY{o}{=} \PY{p}{[}\PY{p}{(}\PY{l+m+mi}{200}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{280}\PY{p}{,} \PY{l+m+mi}{400}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{200}\PY{p}{,} \PY{l+m+mi}{600}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{440}\PY{p}{,} \PY{l+m+mi}{800}\PY{p}{)}\PY{p}{,}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} here we create the canvas}
+\PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{constrained\PYZus{}layout}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{25} \PY{o}{*} \PY{l+m+mf}{0.7}\PY{p}{,} \PY{l+m+mf}{8.5} \PY{o}{*} \PY{l+m+mf}{0.7}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} and we add one plot per reference point}
+\PY{n}{gs} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}gridspec}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{axs} \PY{o}{=} \PY{p}{[}
+    \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{n}{gs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,}
+    \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{n}{gs}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,}
+    \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{n}{gs}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{,}
+    \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{n}{gs}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{,}
+\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} for each one of the reference points, let\PYZsq{}s plot the self\PYZhy{}attention}
+\PY{c+c1}{\PYZsh{} for that point}
+\PY{k}{for} \PY{n}{idx\PYZus{}o}\PY{p}{,} \PY{n}{ax} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{idxs}\PY{p}{,} \PY{n}{axs}\PY{p}{)}\PY{p}{:}
+    \PY{n}{idx} \PY{o}{=} \PY{p}{(}\PY{n}{idx\PYZus{}o}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{/}\PY{o}{/} \PY{n}{fact}\PY{p}{,} \PY{n}{idx\PYZus{}o}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{/}\PY{o}{/} \PY{n}{fact}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{sattn}\PY{p}{[}\PY{o}{.}\PY{o}{.}\PY{o}{.}\PY{p}{,} \PY{n}{idx}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{idx}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cividis}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{interpolation}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nearest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{self\PYZhy{}attention}\PY{l+s+si}{\PYZob{}}\PY{n}{idx\PYZus{}o}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} and now let\PYZsq{}s add the central image, with the reference points as red circles}
+\PY{n}{fcenter\PYZus{}ax} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{n}{gs}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n}{fcenter\PYZus{}ax}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im}\PY{p}{)}
+\PY{k}{for} \PY{p}{(}\PY{n}{y}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o+ow}{in} \PY{n}{idxs}\PY{p}{:}
+    \PY{n}{scale} \PY{o}{=} \PY{n}{im}\PY{o}{.}\PY{n}{height} \PY{o}{/} \PY{n}{img}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]}
+    \PY{n}{x} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{x} \PY{o}{/}\PY{o}{/} \PY{n}{fact}\PY{p}{)} \PY{o}{+} \PY{l+m+mf}{0.5}\PY{p}{)} \PY{o}{*} \PY{n}{fact}
+    \PY{n}{y} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{y} \PY{o}{/}\PY{o}{/} \PY{n}{fact}\PY{p}{)} \PY{o}{+} \PY{l+m+mf}{0.5}\PY{p}{)} \PY{o}{*} \PY{n}{fact}
+    \PY{n}{fcenter\PYZus{}ax}\PY{o}{.}\PY{n}{add\PYZus{}patch}\PY{p}{(}\PY{n}{plt}\PY{o}{.}\PY{n}{Circle}\PY{p}{(}\PY{p}{(}\PY{n}{x} \PY{o}{*} \PY{n}{scale}\PY{p}{,} \PY{n}{y} \PY{o}{*} \PY{n}{scale}\PY{p}{)}\PY{p}{,} \PY{n}{fact} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+    \PY{n}{fcenter\PYZus{}ax}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Homework_3_files/Homework_3_12_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection*{\texorpdfstring{\textbf{Q3. Understanding Attention
+Mechanisms}}{Q3. Understanding Attention Mechanisms}}\label{q3.-understanding-attention-mechanisms}
+
+In this task, you focus on understanding the attention mechanisms
+present in the encoder and decoder of DETR.
+
+\begin{itemize}
+\item
+  \textbf{Briefly describe the types of attention used in the encoder
+  and decoder, and explain the key differences between them.}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Encoder's Self-Attention}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Learns relationships among input image features.
+
+      \begin{itemize}
+      \tightlist
+      \item
+        Considers the relationships between each pixel and all other
+        pixels in the encoder to capture the boundaries between objects
+        and background in the image.
+      \item
+        Focuses on capturing the overall characteristics of the entire
+        image rather than the details of individual objects.
+      \end{itemize}
+    \end{itemize}
+  \item
+    \textbf{Decoder's Cross-Attention}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Cross-attention focuses on specific queries by referencing the
+      encoder's output.
+
+      \begin{itemize}
+      \tightlist
+      \item
+        Each query focuses on the location and type of each object.
+      \item
+        The decoder predicts appropriate bounding boxes and labels for
+        each object.
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{Based on the visualized results from Q2, provide an analysis
+  of the distinct characteristics of each attention mechanism in the
+  encoder and decoder. Feel free to express your insights.}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The encoder's self-attention captures the overall context of the
+    image, while the decoder's cross-attention focuses on specific
+    queries to learn detailed features.
+  \item
+    According to the visualized results from Q2, the encoder's attention
+    covers the entire image in a general manner, while the decoder's
+    attention shows a more focused attention on specific object
+    locations with finer detail.
+  \end{itemize}
+\end{itemize}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
