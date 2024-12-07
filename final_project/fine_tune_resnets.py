@@ -38,16 +38,13 @@ def train(model, loader, criterion, optimizer, device):
     for inputs, labels in loader:
         inputs, labels = inputs.to(device), labels.to(device)
 
-        # Forward pass
         outputs = model(inputs)
         loss = criterion(outputs, labels)
 
-        # Backward pass
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-        # 통계
         total_loss += loss.item()
         _, preds = outputs.max(1)
         correct += preds.eq(labels).sum().item()
@@ -64,11 +61,9 @@ def validate(model, loader, criterion, device):
         for inputs, labels in loader:
             inputs, labels = inputs.to(device), labels.to(device)
 
-            # Forward pass
             outputs = model(inputs)
             loss = criterion(outputs, labels)
 
-            # 통계
             total_loss += loss.item()
             _, preds = outputs.max(1)
             correct += preds.eq(labels).sum().item()
@@ -79,8 +74,8 @@ def validate(model, loader, criterion, device):
 def model_initializing(num_classes):
     model = models.resnet18(pretrained=True)
 
-    num_ftrs = model.fc.in_features  # 기존 fully connected layer의 입력 크기
-    model.fc = nn.Linear(num_ftrs, num_classes)  # CIFAR-10 클래스 개수로 수정
+    num_ftrs = model.fc.in_features
+    model.fc = nn.Linear(num_ftrs, num_classes)
 
     return model
 
